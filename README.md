@@ -1,4 +1,4 @@
-# rsolr-client-cert [![Build Status](https://secure.travis-ci.org/mbklein/rsolr-client-cert.png)](http://travis-ci.org/mbklein/rsolr-client-cert) [![Dependency Status](https://gemnasium.com/mbklein/rsolr-client-cert.png)](https://gemnasium.com/mbklein/rsolr-client-cert)
+# rsolr-client-cert [![Build Status](https://secure.travis-ci.org/mbklein/rsolr-client-cert.png)](http://travis-ci.org/mbklein/rsolr-client-cert)
 
 <b>rsolr-client-cert</b> provides client certificate authentication for [RSolr](https://github.com/mwmitchell/rsolr).
 
