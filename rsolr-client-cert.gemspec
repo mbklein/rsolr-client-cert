@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   # specify any dependencies here; for example:
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec"
-  s.add_development_dependency "fakeweb"
+  s.add_runtime_dependency "jruby-openssl" if RUBY_PLATFORM == 'java'
   s.add_runtime_dependency "rsolr"
   s.add_runtime_dependency "rest-client"
 end
