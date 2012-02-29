@@ -6,11 +6,12 @@ module RSolr
   module ClientCert
 
     def self.connect(opts)
-      ssl_opts = {}
-      opts.each_pair { |k,v| ssl_opts[k] = opts.delete(k) if k.to_s =~ /^ssl_/ }
+      grouped_opts = opts.group_by { |k,v| k.to_s =~ /^ssl_/ ? :ssl : :solr }
+      solr_opts = Hash[grouped_opts[:solr]]
+      ssl_opts = Hash[grouped_opts[:ssl]]
       connection = Connection.new ssl_opts
       client_class = opts.delete(:client_class) || RSolr::Client
-      client_class.new connection, opts
+      client_class.new connection, solr_opts
     end
 
   end
