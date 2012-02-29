@@ -33,3 +33,7 @@ options.
 * Commit. Please do not mess with rakefile, version, or history. If you want to have your own version, 
   that is fine but bump version in a commit by itself I can ignore when I pull.
 * Send me a pull request. Bonus points for topic branches.
+
+## Version History
+
+- <b>0.5.0</b> Initial release
