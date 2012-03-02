@@ -13,20 +13,29 @@ module RSolr
       end
       
       def execute client, request_context
-        resource = RestClient::Resource.new(
-          request_context[:uri].to_s,
-          :ssl_client_cert  =>  ssl_client_cert,
-          :ssl_client_key   =>  ssl_client_key
-        )
-        result = {}
-        resource.send(request_context[:method]) { |response, request, result, &block|
-          result = {
-            :status => response.net_http_res.code.to_i,
-            :headers => response.net_http_res.to_hash,
-            :body => response.net_http_res.body
+        old_proxy = RestClient.proxy
+        begin
+          RestClient.proxy = request_context[:proxy]
+          resource = RestClient::Resource.new(
+            request_context[:uri].to_s,
+            :open_timeout     =>  request_context[:open_timeout],
+            :timeout          =>  request_context[:read_timeout],
+            :ssl_client_cert  =>  ssl_client_cert,
+            :ssl_client_key   =>  ssl_client_key
+          )
+          result = {}
+          signature = [request_context[:method], request_context[:data], request_context[:headers]].compact
+          resource.send(*signature) { |response, request, result, &block|
+            result = {
+              :status => response.net_http_res.code.to_i,
+              :headers => response.net_http_res.to_hash,
+              :body => response.net_http_res.body
+            }
           }
-        }
-        result
+          result
+        ensure
+          RestClient.proxy = old_proxy
+        end
       end
       
       protected
