@@ -25,7 +25,7 @@ module RSolr
           )
           result = {}
           signature = [request_context[:method], request_context[:data], request_context[:headers]].compact
-          resource.send(*signature) { |response, request, result, &block|
+          resource.send(*signature) { |response, request, http_result, &block|
             result = {
               :status => response.net_http_res.code.to_i,
               :headers => response.net_http_res.to_hash,
