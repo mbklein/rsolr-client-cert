@@ -38,3 +38,4 @@ options.
 
 - <b>0.5.0</b> Initial release
 - <b>0.5.1</b> Add additional HTTP method support, as well as all RSolr request_context parameters
+- <b>0.5.2</b> Fix block scoping issue under Ruby 1.9.x
