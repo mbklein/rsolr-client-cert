@@ -5,11 +5,12 @@ module RSolr
     class Error < Exception; end
       
     class Connection
-      attr_reader :ssl_client_cert, :ssl_client_key
+      attr_reader :ssl_options
       
       def initialize opts = {}
-        @ssl_client_cert = extract_client_cert(opts)
-        @ssl_client_key = extract_client_key(opts)
+        @ssl_options = opts
+        @ssl_options[:ssl_client_cert] = extract_client_cert(opts)
+        @ssl_options[:ssl_client_key] = extract_client_key(opts)
       end
       
       def execute client, request_context
@@ -18,10 +19,10 @@ module RSolr
           RestClient.proxy = request_context[:proxy]
           resource = RestClient::Resource.new(
             request_context[:uri].to_s,
-            :open_timeout     =>  request_context[:open_timeout],
-            :timeout          =>  request_context[:read_timeout],
-            :ssl_client_cert  =>  ssl_client_cert,
-            :ssl_client_key   =>  ssl_client_key
+            ssl_options.merge(
+              :open_timeout     =>  request_context[:open_timeout],
+              :timeout          =>  request_context[:read_timeout]
+            )          
           )
           result = {}
           signature = [request_context[:method], request_context[:data], request_context[:headers]].compact
@@ -52,9 +53,9 @@ module RSolr
         if opts[:ssl_client_key]
           opts[:ssl_client_key]
         elsif opts[:ssl_key_file]
-          key_text = File.read(opts[:ssl_key_file])
+          key_text = File.read(opts.delete(:ssl_key_file))
           key_class = extract_key_class(key_text)
-          key_class.new(key_text, opts[:ssl_key_pass].to_s)
+          key_class.new(key_text, opts.delete(:ssl_key_pass).to_s)
         else
           raise Error, "No :ssl_client_key or :ssl_key_file provided"
         end
@@ -64,9 +65,9 @@ module RSolr
         if opts[:ssl_client_cert]
           opts[:ssl_client_cert]
         elsif opts[:ssl_cert_file]
-          OpenSSL::X509::Certificate.new(File.read(opts[:ssl_cert_file]))
+          OpenSSL::X509::Certificate.new(File.read(opts.delete(:ssl_cert_file)))
         else
-          raise Error, "No :ssl_client_key or :ssl_key_file provided"
+          raise Error, "No :ssl_client_cert or :ssl_cert_file provided"
         end
       end
     end
