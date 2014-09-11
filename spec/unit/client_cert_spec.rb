@@ -12,15 +12,15 @@ describe RSolr::ClientCert do
   it "should provide an SSL certificate connection with an RSA keyfile" do
     solr = RSolr::ClientCert.connect :url => 'https://example.edu/solr', :ssl_cert_file => @cert_file, 
       :ssl_key_file => File.join(@fixture_dir, 'rsa_key.key'), :ssl_key_pass => @key_pass
-    solr.connection.ssl_client_cert.should be_a OpenSSL::X509::Certificate
-    solr.connection.ssl_client_key.should be_a OpenSSL::PKey::RSA
+    solr.connection.ssl_options[:ssl_client_cert].should be_a OpenSSL::X509::Certificate
+    solr.connection.ssl_options[:ssl_client_key].should be_a OpenSSL::PKey::RSA
   end
   
   it "should provide an SSL certificate connection with an RSA keyfile" do
     solr = RSolr::ClientCert.connect :url => 'https://example.edu/solr', :ssl_cert_file => @cert_file, 
       :ssl_key_file => File.join(@fixture_dir, 'dsa_key.key'), :ssl_key_pass => @key_pass
-    solr.connection.ssl_client_cert.should be_a OpenSSL::X509::Certificate
-    solr.connection.ssl_client_key.should be_a OpenSSL::PKey::DSA
+    solr.connection.ssl_options[:ssl_client_cert].should be_a OpenSSL::X509::Certificate
+    solr.connection.ssl_options[:ssl_client_key].should be_a OpenSSL::PKey::DSA
   end
   
 end
